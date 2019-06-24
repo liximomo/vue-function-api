@@ -2,7 +2,7 @@
 
 > [Function-based Component API RFC](https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md)
 
-Future-Oriented Programming, `vue-function-api` provides function api from `Vue3.x` to `Vue2.x` for developering next-generation Vue applications.
+Being future-oriented, `vue-function-api` provides access to the proposed `Vue3.x` API while developing in `Vue2.x` to build next-generation Vue applications.
 
 [**中文文档**](./README.zh-CN.md)
 
@@ -13,23 +13,25 @@ Future-Oriented Programming, `vue-function-api` provides function api from `Vue3
 - [Installation](#Installation)
 - [Usage](#Usage)
 - [API](#API)
-    -  [setup](#setup)
-    -  [value](#value)
-    -  [state](#state)
-    -  [computed](#computed)
-    -  [watch](#watch)
-    -  [lifecycle](#lifecycle)
-    -  [provide, inject](#provide-inject)
+  - [setup](#setup)
+  - [value](#value)
+  - [state](#state)
+  - [computed](#computed)
+  - [watch](#watch)
+  - [lifecycle](#lifecycle)
+  - [provide, inject](#provide-inject)
 - [Misc](#Misc)
 
 # Installation
 
-**npm** 
+**npm**
+
 ```bash
 npm install vue-function-api --save
 ```
 
 **yarn**
+
 ```bash
 yarn add vue-function-api
 ```
@@ -39,6 +41,7 @@ yarn add vue-function-api
 ```html
 <script src="https://unpkg.com/vue-function-api/dist/vue-function-api.umd.js"></script>
 ```
+
 By using the global variable `window.vueFunctionApi`
 
 **CodePen**
@@ -46,9 +49,10 @@ By using the global variable `window.vueFunctionApi`
 [Live Demo](https://codepen.io/liximomo/pen/dBOvgg)
 
 # Usage
-``` js
+
+```js
 import Vue from 'vue';
-import { plugin, value, computed, watch, onMounted } from 'vue-function-api'
+import { plugin, value, computed, watch, onMounted } from 'vue-function-api';
 
 Vue.use(plugin);
 
@@ -94,111 +98,112 @@ new Vue({
 
 ## setup
 
-▸ **setup**(props: *`Props`*, context: *[`Context`](#Context)*): `Object|undefined`
+▸ **setup**(props: _`Props`_, context: _[`Context`](#Context)_): `Object|undefined`
 
 A new component option, `setup()` is introduced. As the name suggests, this is the place where we use the function-based APIs to setup the logic of our component. `setup()` is called when an instance of the component is created, after props resolution. The function receives the resolved props as its first argument.
-
 
 Example:
 
 ```js
 const MyComponent = {
   props: {
-    name: String
+    name: String,
   },
   setup(props) {
-    console.log(props.name)
-  }
-}
+    console.log(props.name);
+  },
+};
 ```
 
 > **`this` is not available inside `setup()`.**
 
-
 ## value
 
-▸ **value**(value: *`any`*): [`Wrapper`][Wrapper]
+▸ **value**(value: _`any`_): [`Wrapper`][wrapper]
 
 Calling `value()` returns a **value wrapper** object that contains a single reactive property: `.value`.
 
 Example:
 
 ```js
-import { value } from 'vue-function-api'
+import { value } from 'vue-function-api';
 
 const MyComponent = {
   setup(props) {
-    const msg = value('hello')
+    const msg = value('hello');
     const appendName = () => {
-      msg.value = `hello ${props.name}`
-    }
+      msg.value = `hello ${props.name}`;
+    };
     return {
       msg,
-      appendName
-    }
+      appendName,
+    };
   },
-  template: `<div @click="appendName">{{ msg }}</div>`
-}
+  template: `<div @click="appendName">{{ msg }}</div>`,
+};
 ```
 
 ```js
-import { value } from 'vue-function-api'
+import { value } from 'vue-function-api';
 
 const MyComponent = {
   setup(props) {
-    const msg = value('hello')
+    const msg = value('hello');
     const appendName = () => {
-      msg.value = `hello ${props.name}`
-    }
+      msg.value = `hello ${props.name}`;
+    };
     return {
       msg,
-      appendName
-    }
+      appendName,
+    };
   },
-  template: `<div @click="appendName">{{ msg }}</div>`
-}
+  template: `<div @click="appendName">{{ msg }}</div>`,
+};
 ```
 
 ## state
-▸ **state**(value: *`any`*)
+
+▸ **state**(value: _`any`_)
 
 Equivalent with [`Vue.observable`](https://vuejs.org/v2/api/index.html#Vue-observable).
 
 Example:
 
 ```js
-import { state } from 'vue-function-api'
+import { state } from 'vue-function-api';
 
 const object = state({
-  count: 0
-})
+  count: 0,
+});
 
-object.count++
+object.count++;
 ```
 
 ## computed
-▸ **computed**(getter: *`Function`*, setter?: *`Function`*): [`Wrapper`][Wrapper]
+
+▸ **computed**(getter: _`Function`_, setter?: _`Function`_): [`Wrapper`][wrapper]
 
 Equivalent with computed property from `vue 2.x`.
 
 Example:
 
 ```js
-import { value, computed } from 'vue-function-api'
+import { value, computed } from 'vue-function-api';
 
-const count = value(0)
-const countPlusOne = computed(() => count.value + 1)
+const count = value(0);
+const countPlusOne = computed(() => count.value + 1);
 
-console.log(countPlusOne.value) // 1
+console.log(countPlusOne.value); // 1
 
-count.value++
-console.log(countPlusOne.value) // 2
+count.value++;
+console.log(countPlusOne.value); // 2
 ```
 
 ## watch
-▸ **watch**(source: *`Wrapper | () => any`*, callback: *`(newVal, oldVal)`*, options?: *[`WatchOption`](#WatchOption)*): `Function` 
 
-▸ **watch**(source: *`Array<Wrapper | () => any>`*, callback: *`([newVal1, newVal2, ... newValN], [oldVal1, oldVal2, ... oldValN])`*, options?: *[`WatchOption`](#WatchOption)*): `Function` 
+▸ **watch**(source: _`Wrapper | () => any`_, callback: _`(newVal, oldVal)`_, options?: _[`WatchOption`](#WatchOption)_): `Function`
+
+▸ **watch**(source: _`Array<Wrapper | () => any>`_, callback: _`([newVal1, newVal2, ... newValN], [oldVal1, oldVal2, ... oldValN])`_, options?: _[`WatchOption`](#WatchOption)_): `Function`
 
 The `watch` API provides a way to perform side effect based on reactive state changes.
 
@@ -207,12 +212,12 @@ The `watch` API provides a way to perform side effect based on reactive state ch
 > [effect-cleanup](https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md#effect-cleanup) is NOT supported currently.
 
 ### WatchOption
-| Name | Type | Default | Description |
-| ------ | ------ | ------ | ------ |
-| lazy | `boolean` | `false` | The opposite of 2.x's `immediate` option |
-| deep | `boolean` | `false` | Same as 2.x |
-| flush | `"pre"` \| `"post"` \| `"sync"` | `"post"` | `"post"`: fire after renderer flush; `"pre"`: fire before renderer flush; `"sync"`: fire synchronously |
 
+| Name  | Type                            | Default  | Description                                                                                            |
+| ----- | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------ |
+| lazy  | `boolean`                       | `false`  | The opposite of 2.x's `immediate` option                                                               |
+| deep  | `boolean`                       | `false`  | Same as 2.x                                                                                            |
+| flush | `"pre"` \| `"post"` \| `"sync"` | `"post"` | `"post"`: fire after renderer flush; `"pre"`: fire before renderer flush; `"sync"`: fire synchronously |
 
 Example:
 
@@ -222,122 +227,121 @@ watch(
   () => count.value + 1,
   // callback
   (value, oldValue) => {
-    console.log('count + 1 is: ', value)
+    console.log('count + 1 is: ', value);
   }
-)
+);
 // -> count + 1 is: 1
 
-count.value++
+count.value++;
 // -> count + 1 is: 2
 ```
 
 Example (Multiple Sources):
 
 ```js
-watch(
-  [valueA, () => valueB.value],
-  ([a, b], [prevA, prevB]) => {
-    console.log(`a is: ${a}`)
-    console.log(`b is: ${b}`)
-  }
-)
+watch([valueA, () => valueB.value], ([a, b], [prevA, prevB]) => {
+  console.log(`a is: ${a}`);
+  console.log(`b is: ${b}`);
+});
 ```
 
 ## lifecycle
-▸ **onCreated**(cb: *`Function`*)
 
-▸ **onBeforeMount**(cb: *`Function`*)
+▸ **onCreated**(cb: _`Function`_)
 
-▸ **onMounted**(cb: *`Function`*)
+▸ **onBeforeMount**(cb: _`Function`_)
 
-▸ **onXXX**(cb: *`Function`*)
+▸ **onMounted**(cb: _`Function`_)
+
+▸ **onXXX**(cb: _`Function`_)
 
 All current lifecycle hooks will have an equivalent `onXXX` function that can be used inside `setup()`
 
 Example:
 
 ```js
-import { onMounted, onUpdated, onUnmounted } from 'vue-function-api'
+import { onMounted, onUpdated, onUnmounted } from 'vue-function-api';
 
 const MyComponent = {
   setup() {
     onMounted(() => {
-      console.log('mounted!')
-    })
+      console.log('mounted!');
+    });
     onUpdated(() => {
-      console.log('updated!')
-    })
+      console.log('updated!');
+    });
     onUnmounted(() => {
-      console.log('unmounted!')
-    })
-  }
-}
+      console.log('unmounted!');
+    });
+  },
+};
 ```
 
 ## provide, inject
-▸ **provide**(value: *`Object`*)
 
-▸ **inject**(key: *`string` | `symbol`*)
+▸ **provide**(value: _`Object`_)
+
+▸ **inject**(key: _`string` | `symbol`_)
 
 Equivalent with `provide` and `inject` from `2.x`
 
 Example:
 
 ```js
-import { provide, inject } from 'vue-function-api'
+import { provide, inject } from 'vue-function-api';
 
-const CountSymbol = Symbol()
+const CountSymbol = Symbol();
 
 const Ancestor = {
   setup() {
     // providing a value can make it reactive
-    const count = value(0)
+    const count = value(0);
     provide({
-      [CountSymbol]: count
-    })
-  }
-}
+      [CountSymbol]: count,
+    });
+  },
+};
 
 const Descendent = {
   setup() {
-    const count = inject(CountSymbol)
+    const count = inject(CountSymbol);
     return {
-      count
-    }
-  }
-}
+      count,
+    };
+  },
+};
 ```
 
 ## Context
+
 The `context` object exposes a number of properties that were previously exposed on this in 2.x APIs:
- 
+
 ```js
 const MyComponent = {
   setup(props, context) {
-    context.attrs
-    context.slots
-    context.refs
-    context.emit
-    context.parent
-    context.root
-  }
-}
+    context.attrs;
+    context.slots;
+    context.refs;
+    context.emit;
+    context.parent;
+    context.root;
+  },
+};
 ```
 
 Full properties list:
 
-* parent
-* root
-* refs
-* slots
-* attrs
-* emit
+- parent
+- root
+- refs
+- slots
+- attrs
+- emit
 
 # Misc
 
 - `vue-function-api` will keep updated with `Vue3.x` API. When `3.0` released, you can replace this library seamlessly.
 - `vue-function-api` only relies on `Vue2.x` itself. Wheather `Vue3.x` is released or not, it's not affect you using this library.
 - Due the the limitation of `Vue2.x`'s public API. `vue-function-api` inevitably introduce some extract workload. It doesn't concern you if you are now working on extreme environment.
-
 
 [wrapper]: https://github.com/vuejs/rfcs/blob/function-apis/active-rfcs/0000-function-api.md#why-do-we-need-value-wrappers
